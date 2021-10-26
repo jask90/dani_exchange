@@ -37,8 +37,6 @@ class AvailabilityTestCase(TestCase):
     def test_get_currency_rates(self):
         client = APIClient()
         client.force_authenticate(user=self.user, token=self.access_token)
-        checkin_date = '2021-09-25'
-        checkout_date = '2021-09-27'
 
         expected_response = {
             '2021-10-25': {'USD': '1.160000'},
@@ -47,7 +45,7 @@ class AvailabilityTestCase(TestCase):
 
         data = {'source_currency': 'EUR', 'date_from': '2021-10-25', 'date_to': '2021-10-26'}
 
-        response = client.generic(method='GET', path=f'/api/currency_rates/', data=json.dumps(data), content_type='application/json')
+        response = client.generic(method='POST', path=f'/api/currency_rates/', data=json.dumps(data), content_type='application/json')
 
         result = json.loads(response.content)
 
@@ -58,14 +56,12 @@ class AvailabilityTestCase(TestCase):
     def test_calculate_exchange(self):
         client = APIClient()
         client.force_authenticate(user=self.user, token=self.access_token)
-        checkin_date = '2021-09-25'
-        checkout_date = '2021-09-27'
 
         expected_response = {'rate': '1.150000', 'amount': '10.50', 'exchange_amount': '12.07500000'}
 
         data = {'source_currency': 'EUR', 'amount': 10.50, 'exchanged_currency': 'USD'}
 
-        response = client.generic(method='GET', path=f'/api/calculate_exchange/', data=json.dumps(data), content_type='application/json')
+        response = client.generic(method='POST', path=f'/api/calculate_exchange/', data=json.dumps(data), content_type='application/json')
 
         result = json.loads(response.content)
         
@@ -76,8 +72,6 @@ class AvailabilityTestCase(TestCase):
     def test_get_time_weighted_rate(self):
         client = APIClient()
         client.force_authenticate(user=self.user, token=self.access_token)
-        checkin_date = '2021-09-25'
-        checkout_date = '2021-09-27'
 
         expected_response = {
             'end_amount': '1011.627906976744186046511628',
@@ -90,7 +84,7 @@ class AvailabilityTestCase(TestCase):
 
         data = {'source_currency': 'USD', 'exchanged_currency': 'EUR', 'start_date': '2021-10-25', 'amount': 1000}
 
-        response = client.generic(method='GET', path=f'/api/time_weighted_rate/', data=json.dumps(data), content_type='application/json')
+        response = client.generic(method='POST', path=f'/api/time_weighted_rate/', data=json.dumps(data), content_type='application/json')
 
         result = json.loads(response.content)
 

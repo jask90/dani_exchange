@@ -15,8 +15,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 
 
-@swagger_auto_schema(methods=['get',], query_serializer=CurrencyRatesSerializer)
-@api_view(['GET'])
+@swagger_auto_schema(methods=['post',], request_body=CurrencyRatesSerializer)
+@api_view(['POST'])
 @authentication_classes((BasicAuthentication, OAuth2Authentication,))
 @permission_classes((IsAuthenticated,))
 def get_currency_rates(request):
@@ -52,8 +52,8 @@ def get_currency_rates(request):
     return HttpResponse(json.dumps(response, cls=DjangoJSONEncoder), status=status.HTTP_200_OK)
 
 
-@swagger_auto_schema(methods=['get',], query_serializer=AmountCurrencyExchangeSerializer)
-@api_view(['GET'])
+@swagger_auto_schema(methods=['post',], request_body=AmountCurrencyExchangeSerializer)
+@api_view(['POST'])
 @authentication_classes((BasicAuthentication, OAuth2Authentication,))
 @permission_classes((IsAuthenticated,))
 def calculate_exchange(request):
@@ -87,8 +87,8 @@ def calculate_exchange(request):
     return HttpResponse(json.dumps(response, cls=DjangoJSONEncoder), status=status.HTTP_200_OK)
 
 
-@swagger_auto_schema(methods=['get',], query_serializer=TimeWeightRateSerializer)
-@api_view(['GET'])
+@swagger_auto_schema(methods=['post',], request_body=TimeWeightRateSerializer)
+@api_view(['POST'])
 @authentication_classes((BasicAuthentication, OAuth2Authentication,))
 @permission_classes((IsAuthenticated,))
 def get_time_weighted_rate(request):
