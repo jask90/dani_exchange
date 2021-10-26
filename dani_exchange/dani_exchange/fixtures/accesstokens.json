@@ -1,0 +1,1 @@
+[{"model": "oauth2_provider.accesstoken", "pk": 1, "fields": {"user": 2, "source_refresh_token": null, "token": "sOYKgt9fNJhmpFHSTmdS7VFW6a9XOB", "application": 1, "expires": "2041-10-23T15:46:37Z", "scope": "", "created": "2021-10-23T15:46:59.125Z", "updated": "2021-10-23T15:46:59.125Z"}}]

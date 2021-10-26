@@ -1,0 +1,11 @@
+# python
+*.py[cod]
+*.sock
+*.pid
+*.save
+
+# local_settings
+local_settings.py
+
+# Static
+/static/*

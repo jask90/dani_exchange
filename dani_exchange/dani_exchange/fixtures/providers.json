@@ -1,0 +1,1 @@
+[{"model": "dani_exchange.provider", "pk": 1, "fields": {"name": "Fixer", "priority": 100}}, {"model": "dani_exchange.provider", "pk": 2, "fields": {"name": "Mock", "priority": 0}}]

@@ -1,0 +1,78 @@
+version: '3.3'
+
+services:
+  dani_exchange_base:
+    build:
+      context: .
+      dockerfile: Dockerfile_base
+    image: dani_exchange_base
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dani_exchange_web
+    command: python3 /opt/dani_exchange/dani_exchange/manage.py runserver 0.0.0.0:8000
+    container_name: dani_exchange_web
+    volumes:
+      - .:/opt/dani_exchange
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+      - dani_exchange_base
+  db:
+    image: postgres:12.2-alpine
+    container_name: dani_exchange_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    ports:
+      - 5432:5432
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dani_exchange_celery
+    command: celery worker -l INFO --pidfile=/tmp/celery.pid -E -Q dani_exchange -n dani_exchange -c 2 -A dani_exchange --workdir /opt/dani_exchange/dani_exchange -b redis://redis:6379/0
+    container_name: dani_exchange_celery
+    volumes:
+      - .:/opt/dani_exchange
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+      - web
+  celerybeat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dani_exchange_celerybeat
+    command: celery beat -l INFO --pidfile=/tmp/celerybeat.pid -A dani_exchange --workdir /opt/dani_exchange/dani_exchange --scheduler django_celery_beat.schedulers:DatabaseScheduler -b redis://redis:6379/0
+    container_name: dani_exchange_celerybeat
+    volumes:
+      - .:/opt/dani_exchange
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - celery
+      - redis
+      - web
+  redis:
+    image: redis
+    container_name: dani_exchange_redis
+    expose:
+    - 6379
+volumes:
+  postgres_data:
